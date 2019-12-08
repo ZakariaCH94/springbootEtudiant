@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<title>Liste des étudiants</title>
+<link rel="stylesheet" type="text/css"
+href="../static/css/bootstrap.min.css"
+th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css"
+href="../static/css/myStyle.css"
+th:href="@{/css/myStyle.css}"/>
+</head>
+<body>
+	<div class="text-danger container" id="msgsup"></div>
+	<div class="container spacer40">
+	<a th:href=@{/form}>Ajoutez un étudiant</a>
+	</div>
+	<div class="container spacer40">
+	 	<form th:action="@{index}" method="get">
+	 		<div class="form-group">
+	 			<label>Mot clé</label>
+	 			<input type="text" name="motCle" th:value="${motcle}"/>
+	 			<button type="submit"> Chercher</button>
+	 		</div>
+	 	</form>
+	</div>
+
+  	<div class="container spacer40">	
+	<table class="table table-striped">
+	
+		<thead>
+			<tr>
+				<th>ID</th><th>Nom</th><th>Date</th><th>Email</th><th>Photo</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="e:${pageEtudiants.content}">
+				<td th:text="${e.id}"></td>
+				<td th:text="${e.nom}"></td>
+				<td th:text="${e.date}"></td>
+				<td th:text="${e.email}"></td>
+				<td>
+					<img th:src="@{getPhoto(id=${e.id})}" style="width: 100px;height: 100px;" class="img-circle">
+				</td>
+				
+				<td>
+				<a onclick="myFunction()" th:href="@{supprimer(id=${e.id})}">Supprimer</a>
+				</td>
+				
+				<td>
+				<a th:href="@{edite(id=${e.id})}">Edite</a>
+				</td>
+				
+			</tr>
+		</tbody>
+		
+	</table>
+	</div>
+	
+	<div class="container">
+		<ul class="nav nav-pills">
+			<li th:each="p:${pages}" th:class="${p==pageCourant}?active:''">
+				<a  th:text="${p}" th:href="@{index(page=${p},motCle=${motcle})}"></a>
+			</li>
+		</ul>
+	</div>
+	
+	<script>
+function myFunction() {
+  confirm("Etes vous sur de supprimer l'image ?!");
+}
+</script>
+
+ <script>
+   
+   // On affiche le message
+
+     document.getElementById('msgsup').innerHTML = GetUrlParam("message");
+   
+     function GetUrlParam( paramName )
+     {
+     var oRegex = new RegExp( ‘[\?&]’ + paramName + ‘=([^&]+)’, ‘i’ ) ;
+     var oMatch = oRegex.exec( window.top.location.search ) ;
+
+     if ( oMatch && oMatch.length > 1 )
+     return decodeURIComponent( oMatch[1] ) ;
+     else
+     return  » ;
+     }
+   
+// On l'efface  secondes plus tard
+setTimeout(function() {
+	
+
+  document.getElementById('msgsup').innerHTML = "";
+},4000);
+
+
+
+  
+   </script>
+  
+</body>
+</html>
